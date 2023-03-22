@@ -1,0 +1,32 @@
+<div class="mt-2">
+    <app-my-header [title]="'Ver Suscripcion del subscriptor'"></app-my-header>
+
+    <ng-container *ngIf="isLoading">
+        <app-my-spiner></app-my-spiner>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoading">
+        <mat-card>
+            <div class="space-y-3">
+                <div class="flex items-center"><mat-icon>person</mat-icon><strong class="mr-2">Plan:</strong> {{
+                    plan.name }}</div>
+                <div class="flex items-center"><mat-icon>money</mat-icon><strong class="mr-2">Valor del Plan:</strong>
+                    {{
+                    plan.amount }}
+                </div>
+                <div class="flex items-center"><mat-icon>check_circle</mat-icon><strong class="mr-2">Estado
+                        Suscripcion:</strong> {{
+                    plan.status }}
+
+                </div>
+                <div class="flex items-center"><mat-icon>check_circle</mat-icon><strong class="mr-2">Proximo vencimiento
+                        de pago</strong> {{
+                    plan.getPaymentExpirationParsed() }}
+
+                </div>
+
+            </div>
+        </mat-card>
+    </ng-container>
+
+</div>
