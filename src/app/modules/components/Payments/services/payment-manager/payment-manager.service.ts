@@ -11,9 +11,8 @@ import { IPaymentMethod } from 'src/app/modules/Models/Payment/interfaces/IPayme
 import { SubscriptionSubscriptorPayment } from 'src/app/modules/Models/Payment/models/SubscriptionSubscriptorPayment';
 import { Bank } from 'src/app/modules/Models/Payment/paymentMethods/Bank';
 import { BankTransfer } from 'src/app/modules/Models/Payment/paymentMethods/BankTransfer';
-import { CashMethod } from 'src/app/modules/Models/Payment/paymentMethods/CashMethod';
 import { CreateNewPaymentSubscriptionData } from 'src/app/modules/Models/Payment/services/models/CreateNewPaymentSubscriptionData';
-import { PlanSubscriptionManagerService } from '../plan-subscription-manager/plan-subscription-manager.service';
+import { IPaymentManagerService } from './interface/IPaymentManagerService';
 
 enum IBankOptions {
   BBVA = 'bbva',
@@ -43,7 +42,7 @@ const PAYMENT_METHOD_BANK_CIUDAD = new BankTransfer(
 @Injectable({
   providedIn: 'root',
 })
-export class PaymentManagerService {
+export class PaymentManagerService implements IPaymentManagerService {
   private _refreshData$ = new Subject<void>();
   private _paymentList: SubscriptionSubscriptorPayment[] = [
     SUBSCRIPTOR_PAYMENT_DEFAULT_1,
@@ -55,10 +54,7 @@ export class PaymentManagerService {
   private _listPaymentMethods: IPaymentMethod[] = [PAYMENT_METHOD_BANK_CIUDAD];
   private _listOwnBanks: Bank[] = [BANK_BBVA_TO_RECIEVE_TRANSFER];
 
-  constructor(
-    private _customLogger: MyCustomLogger,
-    private _planSubscriptionService: PlanSubscriptionManagerService
-  ) {}
+  constructor(private _customLogger: MyCustomLogger) {}
 
   get refreshData$() {
     return this._refreshData$;
@@ -159,7 +155,7 @@ export class PaymentManagerService {
         payment.creador,
         new Date('2023 10 10')
       );
-      newPayment.metodoPago = new CashMethod('1111');
+      newPayment.metodoPago = payment.metodoPago;
 
       this._customLogger.logInfo(
         'newPaymentSubscription MANUAL,',
@@ -182,6 +178,155 @@ export class PaymentManagerService {
     }
   }
 
+  // getPaymentsByFilter(filter: PaymentFilter): Payment[] {
+  //   try {
+  //     // Crear variable inicializada en null.
+  //     let voidFilter = new PaymentFilter();
+
+  //     let _filterPaymentList: Array<Payment> = [];
+
+  //     for (let i = 0; i < this._paymentList.length; i++) {
+  //       let passedFilter = true;
+
+  //       // Estado
+  //       if (filter.estado !== voidFilter.estado) {
+  //         if (this._paymentList[i].estado !== filter.estado) {
+  //           passedFilter = false;
+  //         }
+  //       }
+
+  //       // Monto
+  //       if (
+  //         filter.montoSince !== voidFilter.montoSince ||
+  //         filter.montoUntil !== voidFilter.montoUntil
+  //       ) {
+  //         if (
+  //           !this._paymentList[i].amountIsBetweenTwoValues(
+  //             filter.montoSince,
+  //             filter.montoUntil
+  //           )
+  //         ) {
+  //           passedFilter = false;
+  //         }
+  //       }
+
+  //       // Método de Pago
+  //       if (filter.metodoPago !== voidFilter.metodoPago) {
+  //         if (this._paymentList[i].metodoPago !== filter.metodoPago) {
+  //           passedFilter = false;
+  //         }
+  //       }
+
+  //       // Tipo de Pago (Matricula, Pago Suscripcion, Producto..)
+  //       if (filter.tipoPago !== voidFilter.tipoPago) {
+  //         if (this._paymentList[i].tipoPago !== filter.tipoPago) {
+  //           passedFilter = false;
+  //         }
+  //       }
+
+  //       // Fecha de Creación
+  //       if (
+  //         filter.fechaCreacionSince !== voidFilter.fechaCreacionSince ||
+  //         filter.fechaCreacionUntil !== voidFilter.fechaCreacionUntil
+  //       ) {
+  //         if (
+  //           !this._paymentList[i].containsFechaCreacion(
+  //             filter.fechaCreacionSince,
+  //             filter.fechaCreacionUntil
+  //           )
+  //         ) {
+  //           passedFilter = false;
+  //         }
+  //       }
+
+  //       // Fecha de Pago
+  //       if (
+  //         filter.fechaPagoSince !== voidFilter.fechaPagoSince ||
+  //         filter.fechaPagoUntil !== voidFilter.fechaPagoUntil
+  //       ) {
+  //         if (
+  //           !this._paymentList[i].containsFechaPago(
+  //             filter.fechaPagoSince,
+  //             filter.fechaPagoUntil
+  //           )
+  //         ) {
+  //           passedFilter = false;
+  //         }
+  //       }
+
+  //       // Creador
+  //       if (filter.creator !== voidFilter.creator) {
+  //         if (this._paymentList[i].creador !== filter.creator) {
+  //           passedFilter = false;
+  //         }
+  //       }
+
+  //       // Plan Subscription
+  //       if (filter.planSubscription !== voidFilter.planSubscription) {
+  //         if (this._paymentList[i] instanceof SubscriptionSubscriptorPayment) {
+  //           if (
+  //             (this._paymentList[i] as SubscriptionSubscriptorPayment)
+  //               .planSubscription !== filter.planSubscription
+  //           ) {
+  //             passedFilter = false;
+  //           }
+  //         } else {
+  //           passedFilter = false; // Si no es pago de tipo suscripcion, no pasa.
+  //         }
+  //       }
+
+  //       // Producto // Todo arreglar
+  //       // if (filter.producto !== voidFilter.producto) {
+  //       //   if (this._paymentList[i] instanceof ProductSubscriptorPayment) {
+  //       //     if (
+  //       //       (this._paymentList[i] as ProductSubscriptorPayment).producto !==
+  //       //       filter.producto
+  //       //     ) {
+  //       //       passedFilter = false;
+  //       //     }
+  //       //   } else {
+  //       //     passedFilter = false; // Si no es pago de tipo suscripcion, no pasa.
+  //       //   }
+  //       // }
+
+  //       // Pagador
+  //       if (filter.pagador !== voidFilter.pagador) {
+  //         if (this._paymentList[i] instanceof SubscriptorPayment) {
+  //           if (
+  //             (this._paymentList[i] as SubscriptorPayment).pagador !==
+  //             filter.pagador
+  //           ) {
+  //             passedFilter = false;
+  //           }
+  //         } else {
+  //           passedFilter = false; // Si no es pago de tipo suscripcion, no pasa.
+  //         }
+  //       }
+
+  //       if (passedFilter) {
+  //         _filterPaymentList.push(this._paymentList[i]);
+  //       }
+  //     }
+
+  //     if (_filterPaymentList.length <= 0) {
+  //       throw new NoHayResultadosError(
+  //         `No hay ningun resultado para esta busqueda con estos filtros ${JSON.stringify(
+  //           filter,
+  //           null,
+  //           2
+  //         )} .`
+  //       );
+  //     } else {
+  //       return _filterPaymentList;
+  //     }
+  //   } catch (error) {
+  //     this._customLogger.logError(
+  //       'PaymentManagerService, getPaymentsByFilter',
+  //       `${error}`
+  //     );
+  //     throw Error(`${error}`);
+  //   }
+  // }
   // - - - - - - - - - -  Lista metodos pago  - - - - - - - - - -
   getPaymentMethods(): IPaymentMethod[] {
     try {

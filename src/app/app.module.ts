@@ -15,6 +15,8 @@ import { MyMainLayoutComponent } from './modules/Layout/my-main-layout/my-main-l
 import { MainLoginComponent } from './modules/Login/layout/main-login/main-login.component';
 import { SharedModule } from './modules/Shared/shared.module';
 
+// Servicio
+
 @NgModule({
   declarations: [AppComponent, MyMainLayoutComponent, MainLoginComponent],
   imports: [

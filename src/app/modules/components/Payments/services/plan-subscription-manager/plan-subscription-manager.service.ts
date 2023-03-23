@@ -46,11 +46,7 @@ export class PlanSubscriptionManagerService {
       );
 
       if (planSubscription) {
-        return of(planSubscription).pipe(
-          tap(() => {
-            this.refreshData$.next();
-          })
-        );
+        return of(planSubscription);
       } else {
         return throwError(`No se encontró un plan con el id ${id}`);
       }
@@ -59,6 +55,27 @@ export class PlanSubscriptionManagerService {
         'PlanSubscriptionManagerService, getPlanSubscriptionById',
         error,
         `id: ${id}`
+      );
+      return throwError(`${error}`);
+    }
+  }
+
+  getPlanSubscriptionByName(name: string): Observable<PlanSubscription> {
+    try {
+      const planSubscription = this._planSubscriptionList.find(
+        (p) => p.nombre === name
+      );
+
+      if (planSubscription) {
+        return of(planSubscription);
+      } else {
+        return throwError(`No se encontró un plan con el nombre: ${name}`);
+      }
+    } catch (error) {
+      this._customLogger.logError(
+        'PlanSubscriptionManagerService, getPlanSubscriptionById',
+        error,
+        `nombre: ${name}`
       );
       return throwError(`${error}`);
     }

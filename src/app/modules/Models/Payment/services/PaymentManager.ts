@@ -13,6 +13,7 @@ import { User } from '../../User/models/User';
 import { Payment } from '../models/Payment';
 import { PaymentFilter } from '../paymentFilter/PaymentFilter';
 const CustomLogger = new MyCustomLogger();
+
 export class PaymentManager implements IPaymentManager {
   private _paymentList: Payment[];
 

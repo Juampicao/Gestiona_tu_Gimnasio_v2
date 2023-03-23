@@ -42,4 +42,8 @@ export class AuthService {
   isUserLogged() {
     return this.isLogged;
   }
+
+  getUserName() {
+    return 'Vikingos';
+  }
 }

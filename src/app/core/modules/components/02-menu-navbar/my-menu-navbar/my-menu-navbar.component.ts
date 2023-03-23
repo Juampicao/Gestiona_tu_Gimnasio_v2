@@ -13,6 +13,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { AuthService } from 'src/app/core/services/auth-service/auth.service';
 
 //! Interfaz
 interface SideNavToggle {
@@ -55,13 +56,15 @@ export interface MenuItemNavBar {
   ],
 })
 export class MyMenuNavbarComponent implements OnInit {
+  gimName: string = 'Gimnasio';
+
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
   screenWidth = 0;
   // navData: MenuItemNavBar[] = navbarData; // ! Data en nav.ts
   @Input() navData: MenuItemNavBar[] = []; // ! Data en nav.ts
 
-  constructor() {
+  constructor(private _authService: AuthService) {
     console.log('navbar', this.navData);
   }
 
@@ -78,6 +81,7 @@ export class MyMenuNavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.gimName = this._authService.getUserName();
     this.screenWidth = window.innerWidth;
   }
 

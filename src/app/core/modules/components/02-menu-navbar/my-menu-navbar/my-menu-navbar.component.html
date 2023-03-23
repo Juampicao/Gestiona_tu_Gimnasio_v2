@@ -1,7 +1,7 @@
 <div class="sidenav rounded-r-xl" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
     <div class="logo-container mt-5 mb-5 ">
-        <button class="logo" (click)="toggleCollapse()">G</button>
-        <div class="logo-text" @fadeInOut *ngIf="collapsed">Gimnasio</div>
+        <button class="logo" (click)="toggleCollapse()">{{gimName.charAt(0)}}</button>
+        <div class="logo-text" @fadeInOut *ngIf="collapsed">{{gimName}}</div>
         <button class="btn-close rounded-xl" @rotate *ngIf="collapsed" (click)="closeSidenav()">
             <!-- <i class="fal fa-times close-icon"></i> -->
             <mat-icon class="sidenav-link-icon bg-white rounded-xl">close</mat-icon>

@@ -1,9 +1,11 @@
+import { Helper } from 'src/app/core/services/helper/Helper';
 import { IBankOptions } from '../interfaces/Interfaces';
 
 export class Bank {
   private _nombreBanco: IBankOptions;
   private _numeroCuenta: string | number;
   private _otrosDatos: string | number;
+  private _id: any;
 
   constructor(
     nombreBanco: IBankOptions,
@@ -13,6 +15,11 @@ export class Bank {
     this._nombreBanco = nombreBanco;
     this._numeroCuenta = numeroCuenta;
     this._otrosDatos = otrosDatos;
+    this._id = Helper.generateId();
+  }
+
+  public get id(): any {
+    return this._id;
   }
 
   public get nombreBanco(): IBankOptions {

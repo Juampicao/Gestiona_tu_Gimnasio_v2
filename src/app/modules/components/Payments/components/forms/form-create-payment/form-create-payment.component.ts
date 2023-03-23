@@ -11,13 +11,21 @@ import { MySearchClass } from 'src/app/core/modules/components/07-search-bar/my-
 import { MyConfirmComponent } from 'src/app/core/modules/components/11-confirm-reutilizable/my-confirm/my-confirm.component';
 import { MyClientNotificationService } from 'src/app/core/services/client-notificacion/my-client-notification.service';
 import { MyCustomLogger } from 'src/app/core/services/log/my-custom-logger';
+import { IBankOptions } from 'src/app/modules/Models/Payment/interfaces/Interfaces';
+import { BankTransfer } from 'src/app/modules/Models/Payment/paymentMethods/BankTransfer';
+import { CashMethod } from 'src/app/modules/Models/Payment/paymentMethods/CashMethod';
 import { CreateNewPaymentSubscriptionData } from 'src/app/modules/Models/Payment/services/models/CreateNewPaymentSubscriptionData';
+import { PlanSubscription } from 'src/app/modules/Models/PlanSubscription/models/PlanSubscription';
 import { Subscriptor } from 'src/app/modules/Models/Subscriptor/model/Subscriptor';
-import { USER_1_DEFAULT } from 'src/app/modules/Models/ValoresDefault2';
+import {
+  BANK_BBVA_TO_RECIEVE_TRANSFER,
+  USER_1_DEFAULT,
+} from 'src/app/modules/Models/ValoresDefault2';
 import { DataFormSubscriptor } from 'src/app/modules/Subscriptors/components/forms/form-create-sub/form-create-sub.component';
 import { IForms } from 'src/app/modules/Subscriptors/components/forms/interfaces/IForms';
 import { SubscriptorManagerService } from 'src/app/modules/Subscriptors/services/subscriptor-manager/subscriptor-manager.service';
 import { PaymentManagerService } from '../../../services/payment-manager/payment-manager.service';
+import { PlanSubscriptionManagerService } from '../../../services/plan-subscription-manager/plan-subscription-manager.service';
 
 export class PaymentFormValues {
   constructor(
@@ -103,6 +111,7 @@ export class FormCreatePaymentComponent implements OnInit, IForms {
     private _clientNotification: MyClientNotificationService,
     private _subscriptorManagerService: SubscriptorManagerService,
     private _paymentManagerService: PaymentManagerService,
+    private _planSubscriptionService: PlanSubscriptionManagerService,
     private _dialog: MatDialog,
     private _location: Location
   ) {
@@ -178,18 +187,40 @@ export class FormCreatePaymentComponent implements OnInit, IForms {
       const numeroTransaccion = this.form.controls['numeroTransaccion'].value;
       // const mercadoPago = this.form.controls['mercadoPago'].value;
 
+      // Buscar pagador.
       const pagadorComplete = await this._subscriptorManagerService
         .getSubscriptorById(pagador)
         .toPromise();
 
+      // Buscar Plan
+      const planSubscriptionComplete = await this.getPlanSubscriptionByName(
+        planSubscription
+      );
+
+      // Buscar metodoPago
+      let metodoPagoComplete;
+      if (metodoPago === 'efectivo') {
+        metodoPagoComplete = new CashMethod('');
+      }
+
+      // Todo cada metodo Banco es diferente..
+      if (metodoPago === 'transferencia') {
+        metodoPagoComplete = new BankTransfer(
+          numeroTransaccion,
+          IBankOptions.CIUDAD,
+          BANK_BBVA_TO_RECIEVE_TRANSFER
+        );
+      }
+
       if (await this.confirmForm(JSON.stringify(this.form.value, null, 2))) {
         //!-1 Creador de pagos automatizado.
         // Creo la informacion a pasarle al subscriptor para pagar.
-        if (pagadorComplete) {
+        if (pagadorComplete && metodoPagoComplete && planSubscriptionComplete) {
           const newPaymentSubscription = new CreateNewPaymentSubscriptionData(
-            planSubscription,
+            planSubscriptionComplete,
             pagadorComplete,
-            USER_1_DEFAULT
+            USER_1_DEFAULT,
+            metodoPagoComplete
           );
 
           this._customLogger.logInfo(
@@ -318,10 +349,6 @@ export class FormCreatePaymentComponent implements OnInit, IForms {
 
     const findSubscriptor = await this.getSubscriptorById(selectedOption.value);
 
-    // this.subscriptorSelected = selectedOption;
-
-    // console.log(this.subscriptorSelected);
-
     // Actualizar campos con los valores del subscriptor.
     this.form.setValue({
       pagador: this.subscriptor.id,
@@ -358,6 +385,29 @@ export class FormCreatePaymentComponent implements OnInit, IForms {
     }
 
     // realizar la acción deseada con el valor seleccionado
+  }
+
+  getPlanSubscriptionByName(name: string): PlanSubscription | null {
+    try {
+      let newPlan;
+      const response = this._planSubscriptionService
+        .getPlanSubscriptionByName(name)
+        .subscribe((plan) => {
+          newPlan = plan;
+        });
+
+      if (newPlan) {
+        return newPlan;
+      } else {
+        throw new Error('No existe el plan');
+      }
+    } catch (error) {
+      this._customLogger.logDebug(
+        'PaymentForm, onSubmit , getPlanSUbscriptionById',
+        error
+      );
+      throw new Error(`${error}`);
+    }
   }
 }
 

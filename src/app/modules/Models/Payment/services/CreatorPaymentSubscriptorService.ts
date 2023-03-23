@@ -22,6 +22,7 @@ export class CreatorPaymentSubscriptorService
     suscriptorPagador: Subscriptor,
     creador: User,
     fechaCreacion: Date
+    // Todo deberia ir metodoPago..
   ): SubscriptionSubscriptorPayment {
     const estado = IPaymentStatus.PENDIENTE;
     const monto = planSubscription.monto;

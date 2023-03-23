@@ -1,9 +1,11 @@
+import { Dialog } from '@angular/cdk/dialog';
 import {
   CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MyDeleteComponent } from 'src/app/core/modules/components/03-delete/my-delete.component';
 
 @Component({
   selector: 'app-todo-drag-drop',
@@ -11,6 +13,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
   styleUrls: ['./todo-drag-drop.component.css'],
 })
 export class TodoDragDropComponent implements OnInit {
+  newTask: string = '';
+
   todo = [
     'Plan de entrenamiento',
     'Compra de equipamiento',
@@ -28,7 +32,10 @@ export class TodoDragDropComponent implements OnInit {
     'Facturacion y pagos',
   ];
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    public dialog: Dialog // public deleteService: MyDeleteComponent
+  ) {}
 
   ngOnInit(): void {}
 
@@ -59,7 +66,19 @@ export class TodoDragDropComponent implements OnInit {
   }
 
   deleteTaskProcess(index: number) {
-    this.process.splice(index, 1);
-    this.cdr.detectChanges(); // actualiza la vista después de eliminar el elemento
+    this.confirmDelete();
+
+    //   this.process.splice(index, 1);
+    // this.cdr.detectChanges(); // actualiza la vista después de eliminar el elemento
+  }
+
+  onAddTask() {
+    this.todo.push(this.newTask);
+  }
+
+  confirmDelete() {
+    this.dialog.open(MyDeleteComponent, {
+      data: 'eliminar esto?',
+    });
   }
 }

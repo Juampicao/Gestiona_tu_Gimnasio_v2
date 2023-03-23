@@ -22,6 +22,7 @@ import { IPaymentStatus, IPaymentTypes } from '../interfaces/Interfaces';
 import { IPaymentMethod } from '../interfaces/IPaymentMethods';
 
 import { MyCustomLogger } from 'src/app/core/services/log/my-custom-logger';
+import { Subscriptor } from '../../Subscriptor/model/Subscriptor';
 const customLogger = new MyCustomLogger();
 
 export class Payment {
@@ -33,6 +34,7 @@ export class Payment {
   private _fechaCreacion: Date;
   private _fechaPago: Date | null;
   private _creador: User; // Todo Gimnasio creador.
+  protected _pagador: Subscriptor | null; // Subscriptor Id.
 
   /**
    * @param estado IPaymentStatus (pendiente, completado)
@@ -56,6 +58,7 @@ export class Payment {
     this._metodoPago = null;
     this._creador = creador;
     this._id = Helper.generateId();
+    this._pagador = null;
   }
 
   public get id(): any {
@@ -116,6 +119,14 @@ export class Payment {
 
   public set creador(value: User) {
     this._creador = value;
+  }
+
+  public get pagador(): Subscriptor | null {
+    return this._pagador;
+  }
+
+  public set pagador(value: Subscriptor | null) {
+    this._pagador = value;
   }
 
   /**

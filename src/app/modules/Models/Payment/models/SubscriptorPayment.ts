@@ -4,7 +4,7 @@ import { IPaymentStatus, IPaymentTypes } from '../interfaces/Interfaces';
 import { Payment } from './Payment';
 
 export abstract class SubscriptorPayment extends Payment {
-  protected _pagador: Subscriptor; // Subscriptor Id.
+  // protected _pagador: Subscriptor; // Subscriptor Id.
   protected _expirationPaymentDate: Date; // Fecha expiración.
   protected _interes: number; // ¿Corren interes o como lo manejo?.
 
@@ -33,13 +33,14 @@ export abstract class SubscriptorPayment extends Payment {
     this._expirationPaymentDate = expirationPaymentDate;
   }
 
-  public get pagador(): Subscriptor {
-    return this._pagador;
-  }
+  // Todo quitar. Ya esta en el payment padre.
+  // public get pagador(): Subscriptor {
+  //   return this._pagador;
+  // }
 
-  public set pagador(value: Subscriptor) {
-    this._pagador = value;
-  }
+  // public set pagador(value: Subscriptor) {
+  //   this._pagador = value;
+  // }
 
   public get expiracion(): Date {
     return this._expirationPaymentDate;

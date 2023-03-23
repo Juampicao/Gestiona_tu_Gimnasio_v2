@@ -17,6 +17,8 @@ import { MyWhatsappButtonComponent } from './modules/components/09-buttons/my-wh
 import { MyDialogContainerComponent } from './modules/components/10-dialog-container/my-dialog-container/my-dialog-container.component';
 import { MyConfirmComponent } from './modules/components/11-confirm-reutilizable/my-confirm/my-confirm.component';
 import { ConstructionPageComponent } from './modules/components/12-pagina-construccion/construction-page/construction-page.component';
+import { MyBarChartComponent } from './modules/components/13-stadistics/my-bar-chart/my-bar-chart.component';
+import { CountryService } from './modules/components/13-stadistics/services/country.service';
 import { MyErrorAlertComponent } from './modules/error-alert/my-error-alert.component';
 import { MySnackBarComponent } from './modules/snackbar/my-snack-bar.component';
 import { MySpinerComponent } from './modules/spiner/my-spiner.component';
@@ -49,6 +51,7 @@ import { MyCustomLogger } from './services/log/my-custom-logger';
     MyCancelButtonComponent,
     ConstructionPageComponent,
     AuthGuard,
+    MyBarChartComponent,
   ],
   imports: [CommonModule, SharedModule],
   exports: [
@@ -71,7 +74,7 @@ import { MyCustomLogger } from './services/log/my-custom-logger';
     MyConfirmComponent,
     MyCancelButtonComponent,
     ConstructionPageComponent,
-
+    MyBarChartComponent,
     AuthGuard,
   ],
   providers: [
@@ -80,6 +83,7 @@ import { MyCustomLogger } from './services/log/my-custom-logger';
     MyDeleterNotificationService,
     MyDialogService,
     AuthService,
+    CountryService,
   ],
 })
 export class CoreModule {}

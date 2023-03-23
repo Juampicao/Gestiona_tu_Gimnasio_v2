@@ -96,6 +96,9 @@ export interface ISubscriptor {
     createNewPaymentSubscriptionData: CreateNewPaymentSubscriptionData
   ): SubscriptionSubscriptorPayment;
 
+  // Todo descomentar
+  // getAllSubscriptionPayments(): SubscriptionSubscriptorPayment[];
+
   /**
    * Todo descomentar.
    */

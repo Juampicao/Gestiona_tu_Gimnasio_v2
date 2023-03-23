@@ -1,4 +1,4 @@
-<h1> {{Title}} </h1>
+<h2> {{Title}} </h2>
 
 
 
@@ -65,7 +65,7 @@
 </ng-container>
 <ng-container *ngIf="!isLoading">
 
-    <table [attr.class]="'w-full rounded-xl border scroll-x-auto ' + BackgroundColor">
+    <table [attr.class]="'w-full rounded-xl border scroll-x-auto  ' + BackgroundColor">
 
         <thead [class]="HeadBackgroundColor + ' ' + HeadTextColor + ' rounded-xl'">
             <tr class="">
@@ -73,10 +73,11 @@
                 <th *ngFor="let head of HeadArray">{{head.Head}} </th>
             </tr>
         </thead>
-        <tbody class="">
-            <tr *ngFor="let item of GridArray;let sr=index" class="border-b">
+        <tbody class=" ">
+            <tr *ngFor="let item of GridArray;let sr=index" class="border-b ">
                 <td class="py-2 pl-4 pr-2" *ngIf="indexNumber">{{sr+1}}</td>
-                <td *ngFor="let head of HeadArray" [class]="'py-2 px-4 text-left border-l ' + head.ClassName">
+                <!-- CAmbiar text-left por center // condicion para opcion -->
+                <td *ngFor="let head of HeadArray" [class]="'py-2 px-4 text-left border-l  ' + head.ClassName">
 
                     <ng-container *ngIf="!head.ButtonTemplate">
                         <div *ngIf="head.FieldName != ''">{{item[head.FieldName]}}</div>

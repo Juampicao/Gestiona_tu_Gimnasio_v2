@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { MyCustomLogger } from 'src/app/core/services/log/my-custom-logger';
 import { IPaymentManagerService } from '../../components/Payments/services/payment-manager/interface/IPaymentManagerService';
 import { PaymentManagerService } from '../../components/Payments/services/payment-manager/payment-manager.service';
@@ -11,7 +12,10 @@ export interface PropsSelectDatabaseInjector {
   type: 'objetos' | 'json';
 }
 
-export class ServiceInjectorPayment {
+@Injectable({
+  providedIn: 'root',
+})
+export class InjectorPaymentService {
   private static _service: IPaymentManagerService;
   private static _paymentList: Payment[] = [];
 
@@ -36,5 +40,3 @@ export class ServiceInjectorPayment {
     }
   }
 }
-
-// Todo deberia usar el paymentManager para facilitar los filtros, que ya lo creamos..

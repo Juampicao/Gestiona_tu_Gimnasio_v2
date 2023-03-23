@@ -25,6 +25,8 @@ export class Subscriptor implements ISubscriptor {
   private _creator: any; // Todo agregar.. En los test, los default, todo.
   private _registerNumber: number; // Todo agregar metodo
 
+  // Todo deberia poder injectar esto y usarlo.
+  // private _serviceContentManager!: IPaymentManagerService;
   /**
    * @param personalInformation
    * @param subscription
@@ -42,6 +44,10 @@ export class Subscriptor implements ISubscriptor {
     this._rutine = rutine;
     this._id = Helper.generateId();
     this._registerNumber = Helper.generateRandomNumber();
+
+    // Todo deberia poder injectar esto y usarlo.
+    // this._serviceContentManager =
+    // InjectorPaymentService.selectService('original'); // Solucion Typescript Vanilla
   }
 
   getRegisterNumber(): number {
@@ -243,7 +249,44 @@ export class Subscriptor implements ISubscriptor {
 
   // Todo descomentar.
   // getAllPayments(): Payment[] {
-  //   throw new Error('Function not implemented.');
+  //   try {
+  //     const paymentManager = ServiceInjectorPayment.selectService('original');
+  //     const result =
+  //       paymentManager.getLastPaymentSubscriptionCompletedBySubscriptorId(
+  //         this._id
+  //       );
+  //     return result;
+  //   } catch (error) {}
+  // }
+
+  // getAllSubscriptionPayments(): SubscriptionSubscriptorPayment[] {
+  //   // const paymentManager = ServiceInjectorPayment.selectService('original');
+  //   // let payments;
+  //   // const response = paymentManager.getAllPayments().subscribe((payments) => {
+  //   //   payments = payments;
+  //   // });
+
+  //   // if (payments) {
+  //   //   return payments;
+  //   // } else {
+  //   //   throw new Error('problema para cargar los pagos del suscriptor');
+  //   // }
+  //   try {
+  //     const paymentManager = new PaymentManagerService(new MyCustomLogger());
+  //     let payments;
+  //     const response = paymentManager.getAllPayments().subscribe((payments) => {
+  //       payments = payments;
+  //     });
+
+  //     if (payments) {
+  //       return payments;
+  //     } else {
+  //       throw new Error('problema para cargar los pagos del suscriptor');
+  //     }
+  //   } catch (error) {
+  //     customLogger.logError('Subscriptor, getAllSubscriptionPayments', error);
+  //     throw new Error(`${error}`);
+  //   }
   // }
 
   // Todo descomentar.

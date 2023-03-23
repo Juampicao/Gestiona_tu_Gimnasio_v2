@@ -2,8 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { MyCustomLogger } from 'src/app/core/services/log/my-custom-logger';
-import { Payment } from 'src/app/modules/Models/Payment/models/Payment';
+import { SubscriptionSubscriptorPayment } from 'src/app/modules/Models/Payment/models/SubscriptionSubscriptorPayment';
 import { PaymentManagerService } from '../../services/payment-manager/payment-manager.service';
+import { PaymentVisual } from '../payment-list/model/PaymentVisual';
 
 @Component({
   selector: 'app-view-payment',
@@ -14,6 +15,8 @@ export class ViewPaymentComponent implements OnInit {
   isLoading: boolean = true;
   idParam: any;
   public message: string = '';
+  public paymentVisual!: PaymentVisual;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: any = '',
@@ -47,13 +50,15 @@ export class ViewPaymentComponent implements OnInit {
     try {
       this._paymentManagerService
         .getPaymentById(this.idParam)
-        .subscribe((payment: Payment) => {
+        .subscribe((payment: SubscriptionSubscriptorPayment) => {
           this._customLogger.logInfo(
             'View-Subscriptor',
             'getSubscriptorById',
             payment
           );
-          // this._subscriptorViewService.setSubscriptor(subscriptor);
+
+          this.paymentVisual = new PaymentVisual(payment);
+          this.message = JSON.stringify(this.paymentVisual, null, 2);
         });
     } catch (error) {
       this._customLogger.logError('SubscriptorList, getData', error);

@@ -6,8 +6,8 @@ import { SharedModule } from '../Shared/shared.module';
 import { FormCreateSubComponent } from './components/forms/form-create-sub/form-create-sub.component';
 import { FormFreezeSubComponent } from './components/forms/form-freeze-sub/form-freeze-sub.component';
 import { MyFormComponent } from './components/forms/model/my-form.component';
+import { QrRegisterAccessComponent } from './components/register-access-subscriptor/qr-register-access/qr-register-access.component';
 import { RegisterAccessSubscriptorComponent } from './components/register-access-subscriptor/register-access-subscriptor.component';
-import { StatusListComponent } from './components/status-list/status-list.component';
 import { SubscriptorListComponent } from './components/subscriptor-list/subscriptor-list.component';
 import { TableSubscriptorListComponent } from './components/subscriptor-list/table-subscriptor-list/table-subscriptor-list.component';
 import { ViewSubPaymentsComponent } from './components/view-subscriptor/view-sub-payments/view-sub-payments.component';
@@ -17,7 +17,6 @@ import { ViewSubRegisterAccessComponent } from './components/view-subscriptor/vi
 import { ViewSubscriptorComponent } from './components/view-subscriptor/view-subscriptor.component';
 import { SubscriptorComponent } from './subscriptor.component';
 import { SubscriptorsRoutingModule } from './subscriptors-routing.module';
-import { QrRegisterAccessComponent } from './components/register-access-subscriptor/qr-register-access/qr-register-access.component';
 
 @NgModule({
   declarations: [
@@ -35,9 +34,9 @@ import { QrRegisterAccessComponent } from './components/register-access-subscrip
     MyFormComponent,
     FormCreateSubComponent,
     TableSubscriptorListComponent,
-    StatusListComponent,
     QrRegisterAccessComponent,
   ],
   imports: [CommonModule, SubscriptorsRoutingModule, CoreModule, SharedModule],
+  // providers: [PaymentManagerService],
 })
 export class SubscriptorsModule {}
